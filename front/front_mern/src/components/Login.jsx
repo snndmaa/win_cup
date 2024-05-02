@@ -9,7 +9,7 @@ const Login = () => {
   const [originalPassword, setOriginalPassword] = useState('');
   const [scrambledPassword, setScrambledPassword] = useState('');
   const [passwordCharacters] = useState([...'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789`~,.<>?/;:][}{+_)(*&^%$#@!±=-§']);
-  const [username, setUsername] = useState('');
+  const [userName, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
@@ -22,21 +22,28 @@ const Login = () => {
 
     try {
       // Make a POST request to the login API endpoint
-      const response = await axios.post('http://localhost:3000/api/login', { username, password });
+      const response = await axios.post('https://teamakatsuki.maurice.webcup.hodi.host/api/auth/login', { userName, password });
 
-      // If login is successful, redirect or perform other actions
-      console.log(response.data); // Log the response from the server
+      // If login is successful, extract token and id from response
+      const { token, id } = response.data;
+
+      // Store token and id in local storage
+      localStorage.setItem('token', token);
+      localStorage.setItem('id', id);
+      localStorage.setItem('isVerified', false);
+
+      window.location.href = '/home'; 
     } catch (error) {
-      console.error('Error logging in user:', error);
+      // console.error('Error logging in user:', error);
 
       // Handle specific error messages
-      if (error.response && error.response.status === 400) {
+      if (error.response && (error.response.status === 400 || error.response.status === 418 || error.response.status === 404)) {
         setError('Invalid username or password');
-      } else {
+      } else{
         setError('An error occurred while logging in');
       }
     }
-  }
+    }
   const randomArrayElement = (arr) => {
     return arr[(arr.length * Math.random()) | 0];
   };
@@ -333,7 +340,7 @@ const toggleBlinking = (enableBlinking) => {
          
 
           <div className="text-white flex">
-           <p className='text-white'>Don't have an acoount yet?</p> 
+           <p className='text-white'>Don't have an account yet?</p> 
            <div>
 
           <a href="/register"><div className='ml-2 hover:underline'>

@@ -2,6 +2,48 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 const ResetPassword = () => {
     const { token } = useParams();
+    console.log('Token:', token); // Log the token value
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [passwordStrength, setPasswordStrength] = useState(''); // State for password strength
+
+    const handleSubmit = async (event) => {
+      event.preventDefault();
+  
+      if (password !== confirmPassword) {
+          // Handle password mismatch error
+          console.error('Passwords do not match');
+          return;
+      }
+  
+      try {
+         
+          const url = `https://teamakatsuki.maurice.webcup.hodi.host/api/auth/reset-password/${token}`;
+  
+          const response = await fetch(url, {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json', // Example header
+                  // Add any other headers if required
+              },
+              body: JSON.stringify({ password }),
+          });
+  
+          if (!response.ok) {
+            window.location.href = '/404_page';
+          }
+  
+          // Handle success response
+          const data = await response.json();
+          console.log('Password reset successfully:', data);
+          window.location.href = '/login';
+      } catch (error) {
+          // Handle error response
+          console.error('Failed to reset password:', error);
+      }
+  };
+  
+    
     useEffect(() => {
         const passwordInput = document.getElementById("password");
     
@@ -100,23 +142,22 @@ const ResetPassword = () => {
         };
       }, []); // Empty dependency array for running only once
   return (
-    <section className="bg-gray-50 dark:bg-gray-900">
-      <div className="flex flex-col items-center justify-center text-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-        <a href="#" className="flex text-center items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
+    <section className="bg-gray-900">
+      <div className="flex flex-col items-center justify-center h-screen text-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+        <a href="#" className="flex text-center items-center mb-6 text-2xl font-semibold text-white">
           {/* <img className="w-8 h-8 mr-2" src="" alt="logo" /> */}
           WIN_CUP
         </a>
-        <div className="w-full p-6 bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md dark:bg-gray-800 dark:border-gray-700 sm:p-8">
-          <h2 className="mb-1 text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+        <div className="w-full p-6 rounded-lg shadow border md:mt-0 sm:max-w-md bg-gray-800 border-gray-700 sm:p-8">
+          <h2 className="mb-1 text-xl font-bold leading-tight tracking-tight  md:text-2xl text-white">
             Reset Password
           </h2>
-          <form className="mt-4 space-y-4 lg:mt-5 md:space-y-5" action="#">
-            
+          <form className="mt-4 space-y-4 lg:mt-5 md:space-y-5" onSubmit={handleSubmit}>
             <div>
-                <input type="password" name="password" id="password" placeholder="PASSWORD" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
+              <input type="password" onChange={(e) => setPassword(e.target.value)} name="password" id="password" placeholder="PASSWORD" className="border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white dark:focus:ring-blue-500 outline-none dark:focus:border-blue-500" required />
             </div>
             <div>
-               <input type="password" name="confirm-password" id="confirm-password" placeholder="CONFIRM PASSWORD" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
+              <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} name="confirm-password" id="confirm-password" placeholder="CONFIRM PASSWORD" className="border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
             </div>
             
             <button type="submit" className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Reset password</button>
