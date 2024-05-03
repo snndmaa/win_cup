@@ -163,7 +163,7 @@ const Register = () => {
         // Check if verification email was sent successfully
         if (verifyResponse.data.status === 'success') {
           // Redirect to the login page
-          alert('Please verify your email with the link which has been sen to your mail address.');
+          alert('Please verify your email with the link which has been sent to your mail address.');
           window.location.href = '/login';
         } else {
           // Handle error if verification email was not sent
@@ -199,10 +199,11 @@ const Register = () => {
               <form className="space-y-4" onSubmit={handleSubmit}>
               
               <div className='flex justify-center'>
-            <div
-                className={`w-10 h-10 p-1 mr-2 rounded-full ring-2 ring-${gender === 'male' ? 'green' : 'gray'}-300 hover:ring-${gender === 'male' ? 'green' : 'gray'}-100 dark:ring-${gender === 'male' ? 'green' : 'gray'}-500 ${gender === 'male' ? 'gender' : ''}`}
-                onClick={() => setSelectedAvatar('male')}
-            >
+              <div
+    className={`w-10 h-10 p-1 mr-2 rounded-full ring-2 hover:ring-purple-700 ring-${gender === 'male' ? 'purple-700' : 'white'}`}
+    onClick={() => setSelectedAvatar('male')}
+>
+
                 <Lottie
                     loop
                     animationData={maleAnimationData}
@@ -211,9 +212,9 @@ const Register = () => {
                 />
             </div>
             <div
-                className={`w-10 h-10 p-1 ml-2 rounded-full ring-2 ring-${gender === 'female' ? 'green' : 'gray'}-300 hover:ring-${gender === 'female' ? 'green' : 'gray'}-100 dark:ring-${gender === 'female' ? 'green' : 'gray'}-500 ${gender === 'female' ? 'gender' : ''}`}
-                onClick={() => setSelectedAvatar('female')}
-            >
+    className={`w-10 h-10 p-1 mr-2 rounded-full ring-2 hover:ring-purple-700 ring-${gender === 'female' ? 'purple-700' : 'white'}`}
+    onClick={() => setSelectedAvatar('female')}
+>
                 <Lottie
                     loop
                     animationData={femaleAnimationData}
